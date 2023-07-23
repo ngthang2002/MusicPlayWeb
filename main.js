@@ -12,9 +12,9 @@
  */
 
 const $ = document.querySelector.bind(document)
-const $$ = document.querySelectorAll(document)
+const $$ = document.querySelectorAll.bind(document)
 
-const song = [
+const songs = [
     {
         id: 1,
         name:"[Nightcore] DEAMN - Without You ( Lyric ) ♪ in hh.mp3",
@@ -141,18 +141,39 @@ const song = [
         src: "./song/You and Me  しゃろう.mp3"
     },
     {
-        id: 25,
+        id: 26,
         name:"アリスダンスグリーンスクリーン.mp3",
         src: "./song/アリスダンスグリーンスクリーン.mp3"
     },
     {
-        id: 25,
+        id: 27,
         name:"可愛くてごめん KJ Physical  Ruki Remix .mp3",
         src: "./song/可愛くてごめん KJ Physical  Ruki Remix .mp3"
     },
     {
-        id: 25,
+        id: 28,
         name:"君がいる世界へ 一花依世界 日本語版 鹿乃.mp3",
         src: "./song/君がいる世界へ 一花依世界 日本語版 鹿乃.mp3"
     }
 ]
+
+const renderSong = ()=>{
+    const html = songs.map(song =>{
+        return `<div class="song">
+        <div class="thumb" style="background-image: url('./image/untitled.PNG')">
+        </div>
+        <div class="body">
+          <h3 class="title">${song.name}</h3>
+          <p class="author">id: ${song.id}</p>
+        </div>
+        <div class="option">
+          <i class="fas fa-ellipsis-h"></i>
+        </div>
+      </div>`
+    })
+    $('.playlist').innerHTML = html.join('\n')
+}
+
+const start = (()=>{
+    renderSong()
+})()
