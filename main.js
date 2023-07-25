@@ -13,27 +13,32 @@
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
+let seek = $('#seek')
+let audio = $('#audio')
+const progress = $('#progress')
+const randomsong = Math.floor(Math.random() * 28)
+let progressvalue1 = 0, progressvalue2 = 0
 
 const songs = [
     {
         id: 1,
         name:"[Nightcore] DEAMN - Without You ( Lyric ) ♪ in hh.mp3",
-        src: "./song/[Nightcore] DEAMN - Without You ( Lyric ) ♪ in hh.mp3",queueMicrotask 
+        src: "./song/[Nightcore] DEAMN - Without You ( Lyric ) ♪ in hh.mp3",
     },
     {
         id: 2,
         name:"10  しゃろう.mp3",
-        src: "./song/10  しゃろう.mp3",queueMicrotask 
+        src: "./song/10  しゃろう.mp3"
     },
     {
         id: 3,
         name:"303 PM.mp3",
-        src: "./song/303 PM.mp3",queueMicrotask 
+        src: "./song/303 PM.mp3"
     },
     {
         id: 4,
         name:"China - Rain - 我是爱音乐的徐梦圆 ♪ in hh.mp3",
-        src: "./song/China - Rain - 我是爱音乐的徐梦圆 ♪ in hh.mp3",queueMicrotask 
+        src: "./song/China - Rain - 我是爱音乐的徐梦圆 ♪ in hh.mp3"
     },
     {
         id: 5,
@@ -159,7 +164,7 @@ const songs = [
 
 const renderSong = ()=>{
     const html = songs.map(song =>{
-        return `<div class="song">
+        return `<div class="song" onclick="playSong('${song.src}', '${song.name}')">
         <div class="thumb" style="background-image: url('./image/untitled.PNG')">
         </div>
         <div class="body">
@@ -174,6 +179,68 @@ const renderSong = ()=>{
     $('.playlist').innerHTML = html.join('\n')
 }
 
+
+$('#play').onclick = ()=>{
+    let play = $$('.fa-play')
+    let pause = $('.fa-pause')
+    if(play[0]){
+        play[0].classList.remove('fa-play')
+        play[0].classList.add('fa-pause')
+        audio.play()
+    }
+    else{
+        pause.classList.remove('fa-pause')
+        pause.classList.add('fa-play')
+        audio.pause()
+    }
+
+}
+function playSong(src, name){
+    let play = $$('.fa-play')
+    audio.src = src
+    if(play[0]){
+        play[0].classList.remove('fa-play')
+        play[0].classList.add('fa-pause')
+    }
+    
+    $('header h2').innerHTML = name
+    audio.play()
+}
+audio.onloadeddata = ()=>{
+    progress.max = Math.floor(audio.duration)
+    console.log(audio.duration)
+}
+
+progress.oninput = ()=>{
+    audio.currentTime = progress.value
+    audio.play()
+}
+
+audio.ontimeupdate = ()=>{
+    progress.value = audio.currentTime
+    seek.innerHTML = `${progress.value}:${progress.max}`
+}
+
+const handleEvents = ()=>{
+    const cd = $('.cd')
+    const cdWidth = cd.offsetWidth
+    let newCdWidth = 200;
+    document.onscroll = ()=>{
+        const scrolltop = window.scrollY 
+        newCdWidth = cdWidth<scrolltop ? 0 : cdWidth-scrolltop
+
+        cd.style.width = newCdWidth+'px'
+        cd.style.opacity = newCdWidth/cdWidth
+    }
+}
+
 const start = (()=>{
+    playSong(songs[randomsong].src, songs[randomsong].name)
     renderSong()
+    handleEvents()
 })()
+
+$('#next').onclick = function(){
+    console.log(window)
+}
+
